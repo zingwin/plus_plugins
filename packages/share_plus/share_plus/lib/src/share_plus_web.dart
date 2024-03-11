@@ -1,4 +1,5 @@
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
@@ -33,8 +34,9 @@ class SharePlusWebPlugin extends SharePlatform {
     Rect? sharePositionOrigin,
   }) async {
     try {
-      await _navigator.share({'title': subject, 'text': text});
-    } on NoSuchMethodError catch (_) {
+      await _navigator.share({'title': subject, 'text': text}.toJSBox).toDart;
+    } on NoSuchMethodError catch (e) {
+      print(e);
       //Navigator is not available or the webPage is not served on https
       final queryParameters = {
         if (subject != null) 'subject': subject,
@@ -99,28 +101,30 @@ class SharePlusWebPlugin extends SharePlatform {
     // See https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
 
     final webFiles = <html.File>[];
-    for (final xFile in files) {
-      webFiles.add(await _fromXFile(xFile));
-    }
-    await _navigator.share({
-      if (subject?.isNotEmpty ?? false) 'title': subject,
-      if (text?.isNotEmpty ?? false) 'text': text,
-      if (webFiles.isNotEmpty) 'files': webFiles,
-    });
+    // for (final xFile in files) {
+    //   webFiles.add(await _fromXFile(xFile));
+    // }
+    // await _navigator
+    //     .share({
+    //       if (subject?.isNotEmpty ?? false) 'title': subject,
+    //       if (text?.isNotEmpty ?? false) 'text': text,
+    //       if (webFiles.isNotEmpty) 'files': webFiles,
+    //     }.toJSBox)
+    //     .toDart;
 
     return _resultUnavailable;
   }
 
-  static Future<html.File> _fromXFile(XFile file) async {
-    final bytes = await file.readAsBytes();
-    return html.File(
-      [ByteData.sublistView(bytes)],
-      file.name,
-      {
-        'type': file.mimeType ?? _mimeTypeForPath(file, bytes),
-      },
-    );
-  }
+  // static Future<html.File> _fromXFile(XFile file) async {
+  //   final bytes = await file.readAsBytes();
+  //   return html.File(
+  //     JsArray.from(BlobPart),
+  //     file.name,
+  //     html.FilePropertyBag({
+  //       'type': file.mimeType ?? _mimeTypeForPath(file, bytes),
+  //     }),
+  //   );
+  // }
 
   static String _mimeTypeForPath(XFile file, Uint8List bytes) {
     return lookupMimeType(file.name, headerBytes: bytes) ??
@@ -132,3 +136,7 @@ const _resultUnavailable = ShareResult(
   'dev.fluttercommunity.plus/share/unavailable',
   ShareResultStatus.unavailable,
 );
+
+extension on html.Navigator {
+  external JSPromise share([JSObject? data]);
+}
