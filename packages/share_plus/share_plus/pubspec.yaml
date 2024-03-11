@@ -42,6 +42,7 @@ dependencies:
 
   # win32 is compatible across v4 and v5 for Win32 only (not COM)
   win32: ">=4.0.0 <6.0.0"
+  web: ^0.5.1
 
 dev_dependencies:
   flutter_test:
