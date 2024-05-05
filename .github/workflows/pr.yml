@@ -23,6 +23,18 @@ jobs:
         if: always() && (steps.lint_pr_title.outputs.error_message != null)
         with:
           header: pr-title-lint-error
+          scopes: |
+            all
+            android_alarm_manager_plus
+            android_intent_plus
+            battery_plus
+            connectivity_plus
+            device_info_plus
+            network_info_plus
+            package_info_plus
+            sensors_plus
+            share_plus
+          requireScope: true
           message: |
             Hey there and thank you for opening this pull request! 👋🏼
 
