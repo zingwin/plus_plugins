@@ -20,6 +20,9 @@ flutter:
         default_package: package_info_plus_web
       windows:
         default_package: package_info_plus_windows
+      ohos:
+        package: dev.fluttercommunity.plus.packageinfo
+        pluginClass: PackageInfoPlusPlugin
 
 dependencies:
   flutter:
