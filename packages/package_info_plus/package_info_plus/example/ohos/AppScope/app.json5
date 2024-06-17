@@ -1,9 +1,9 @@
 {
   "app": {
     "bundleName": "io.flutter.plugins.package_info_plus_example",
-    "vendor": "example",
-    "versionCode": 1000000,
-    "versionName": "1.0.0",
+    "vendor": "星河滚烫",
+    "versionCode": 2000000,
+    "versionName": "2.0.0",
     "icon": "$media:app_icon",
     "label": "$string:app_name"
   }
